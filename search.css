@@ -1,0 +1,41 @@
+﻿.globalInput {
+	display: inline;
+}
+
+.results {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	max-height: 200px;
+	overflow: auto;
+	box-shadow: 0 0 5px #0060a1;
+	border-radius: 5px;
+	text-align: left;
+}
+
+.results .possible {
+	cursor: pointer;
+	padding: 5px 10px;
+}
+.results .possible:first-child {
+	border-radius: 5px 5px 0 0;
+}
+.results .possible:last-child {
+	border-radius: 0 0 5px 5px;
+}
+.results .possible:hover {
+	background: #007dc1;
+	color: #fff;
+}
+.results .possible.focus {
+	background: #007dc1;
+	color: #fff;
+}
+
+.keyword1 {
+	background: #eee;
+	padding: 2px;
+	border-radius: 3px;
+	font-family: Consolas;
+	border: 1px solid #ddd;
+}
