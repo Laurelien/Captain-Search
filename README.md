@@ -7,8 +7,18 @@ L'initialisation est simple :
 ```javascript
 const frenchCities = ['Monaco', 'Paris', 'Nice', 'Lyon', 'Marseille', 'Bordeaux', 'Saint-Etienne', 'Rennes', 'Troyes', 'Metz', 'Strasbourg', 'Lille', 'Nantes', 'Amiens', 'Caen', 'Montpelier', 'Guingamps', 'Dijon', 'Toulouse', 'Angers'];
 
-let search = new cptSearch('#mySearchInput', false, values);
+let search = new cptSearch('#mySearchInput', false, frenchCities);
 ```
+L'objet prend trois arguments :
+
+1. `elem` :
+	L'input de recherche à donner par un selecteur CSS.
+2. `table` :
+	Tableau de valeurs où l'on effectue la recherche.
+3. `multi` :
+	Permet d'afficher une collection d'items dans l'input par la recherche ou qu'un seul. Pour l'instant pas encore mis en place !
+
+
 ## Quelques pré-requis
 
 1. Ajouter la feuille de style CSS (et la modifier pour l'adapter au design général)
