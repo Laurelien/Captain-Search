@@ -38,7 +38,7 @@ Mettre en place le minimum, un input, et un encart pour afficher les résultats 
 
 - [x] Contrôler avec les flêches directionnelles la sélection
 - [ ] Appuyer sur "Echap" pour fermer la liste d'auto-completion
-- [ ] Pouvoir passer plusieurs items dans la recherche
+- [x] Pouvoir passer plusieurs items dans la recherche
 - [ ] Choisir la touche qui sépare les tags dans la recherche multiple (`space`, `enter`, `comma`, `tab`)
 - [ ] Se passer d'un fichier CSS
 - [ ] S'adapter au design
