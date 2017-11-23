@@ -5,28 +5,25 @@
 L'initialisation est simple :
 
 ```javascript
-const frenchCities = ['Monaco', 'Paris', 'Nice', 'Lyon', 'Marseille', 'Bordeaux', 'Saint-Etienne', 'Rennes', 'Troyes', 'Metz', 'Strasbourg', 'Lille', 'Nantes', 'Amiens', 'Caen', 'Montpelier', 'Guingamps', 'Dijon', 'Toulouse', 'Angers'];
+const frenchTeams = ['Monaco', 'Paris', 'Nice', 'Lyon', 'Marseille', 'Bordeaux', 'Saint-Etienne', 'Rennes', 'Troyes', 'Metz', 'Strasbourg', 'Lille', 'Nantes', 'Amiens', 'Caen', 'Montpelier', 'Guingamps', 'Dijon', 'Toulouse', 'Angers'];
 
-let search = new cptSearch('#mySearchInput', frenchCities, false);
+let search = new cptSearch('#mySearchInput', frenchTeams, false);
 ```
-L'objet prend trois arguments :
+L'objet reçoit trois arguments :
 
-1. `elem` :
-	L'input de recherche à donner par un selecteur CSS.
-2. `multi` :
-	Permet d'afficher une collection d'items dans l'input par la recherche ou qu'un seul. Pour l'instant pas encore mis en place !
-3. `table` :
-	Tableau de valeurs où l'on effectue la recherche.
+1. `elem <string>` : L'input de recherche à donner par un selecteur CSS.
+2. `table <Array>` : Tableau de valeurs où l'on effectue la recherche.
+3. `multi <boolean>` : Permet d'afficher une collection d'items dans l'input par la recherche ou un seul. Pour l'instant pas encore mis en place !
 
 
 ## Quelques pré-requis
 
-1. Ajouter la feuille de style CSS (et la modifier pour l'adapter au design général)
+#### 1. Ajouter la feuille de style CSS (et la modifier pour l'adapter au design général)
 ```html
 <link rel="stylesheet" href="search.css" />
 ```
 
-2. Préparer l'environnement adéquate dans le fichier HTML
+#### 2. Préparer l'environnement adéquate dans le fichier HTML
 Mettre en place le minimum, un input, et un encart pour afficher les résultats :
 
 ```html
@@ -36,3 +33,10 @@ Mettre en place le minimum, un input, et un encart pour afficher les résultats 
   <div class="results"></div>
 </form>
 ```
+
+## Plans futur
+
+- [x] Contrôler avec les flêches directionnelles la sélection
+- [ ] Pouvoir passer plusieurs items dans la recherche
+- [ ] Se passer d'un fichier CSS
+- [ ] S'adapter au design
