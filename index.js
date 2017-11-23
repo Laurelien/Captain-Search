@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 	
 /**
  *
@@ -7,26 +7,17 @@
  *
  * @description Le composant de recherche
  * @param {string} elem L'input de recherche à donner par un selecteur CSS
- * @param {boolean} multi Permet d'afficher une collection d'items dans l'input par la recherche ou qu'un seul
  * @param {array} table Tableau de valeurs où l'on effectue la recherche
+ * @param {boolean} multi Permet d'afficher une collection d'items dans l'input par la recherche ou qu'un seul
  */
 
-let cptSearch = function(elem, table, multi) {
+let cptSearch = function(elem, originalTable, multi) {
+	let table = originalTable.slice();
 	this.table = table; // Tableau d'items
 	this.el = document.querySelector(elem); // Input où chercher
-	/* Les dimensions et positions de l'input pour que le bloc de résultats soit de la même taille */
-	let elWidth = this.el.offsetWidth;
-	let elHeight = this.el.offsetHeight;
-	let elLeft = this.el.offsetLeft;
-	let elTop = this.el.offsetTop;
 		
 	this.parent = this.el.parentElement; // l'englobant
 	this.results = this.parent.lastElementChild; // la dernière div de l'englobant qui affiche les résultats
-	/* On donne une dimension et un placement lié à l'input */
-	this.results.style.width = elWidth + 'px';
-	this.results.style.position = 'absolute';
-	this.results.style.left = elLeft + 'px';
-	this.results.style.top = elHeight + elTop + 5 + 'px';
 	
 	let selectedResult = -1; // Quel resultat est "selectionné" dans liste, (-1 = aucun)
 		
@@ -47,11 +38,20 @@ let cptSearch = function(elem, table, multi) {
 		} else {
 			that.multi = multi;
 		}
-		// Création de l'englobant
-		let globalInput = document.createElement('div');
-			globalInput.className = 'globalInput';
-			that.parent.insertBefore(globalInput, that.results);
-			globalInput.appendChild(that.el);
+		if(that.multi === true) {
+			// Création de l'englobant
+			let globalInput = document.createElement('div');
+				globalInput.className = 'globalInput';
+				that.parent.insertBefore(globalInput, that.results);
+				globalInput.appendChild(that.el);
+			that.globalInput = globalInput;
+			// Création de la liste des éléments
+			let liste = document.createElement('ul');
+			globalInput.insertBefore(liste, that.el);
+			globalInput.addEventListener('click', function(e) {
+				that.el.focus();
+			});
+		}
 		// Création de la liste de choix
 		attachEvents(that.el);
 	})();
@@ -65,6 +65,7 @@ let cptSearch = function(elem, table, multi) {
 	
 	function attachEvents(input) {
 		input.addEventListener('keyup', function(e) {
+			position();
 			let possibles = that.results.getElementsByTagName('span');
 			// Si on modifie l'input
 			if(that.el.value !== previousValue) {
@@ -73,7 +74,7 @@ let cptSearch = function(elem, table, multi) {
 				selectedResult = -1;
 			}
 			// Si on descend
-			if(e.keyCode === 40 && selectedResult < possibles.length - 1) {
+			if(e.keyCode === 40 && selectedResult < possibles.length - 1 && that.el.value !== '') {
 				that.results.style.display = 'flex';
 				if (selectedResult > -1) { // Cette condition évite une modification de childNodes[-1], qui n'existe pas, bien entendu
 					possibles[selectedResult].className = 'possible';
@@ -81,7 +82,7 @@ let cptSearch = function(elem, table, multi) {
 				possibles[++selectedResult].className = 'possible focus';
 			}
 			// Si on monte
-			else if(e.keyCode === 38 && selectedResult > -1) {
+			else if(e.keyCode === 38 && selectedResult > -1 && that.el.value !== '') {
 				possibles[selectedResult--].className = 'possible';	
 				if (selectedResult > -1) { // Cette condition évite une modification de childNodes[-1], qui n'existe pas, bien entendu
 					possibles[selectedResult].className = 'possible focus';
@@ -154,11 +155,74 @@ let cptSearch = function(elem, table, multi) {
 	 */
 	
 	function choose(value) {
-		that.el.value = previousValue = value.innerHTML;
+		if(that.multi === false) {
+			that.el.value = previousValue = value.innerHTML;
+		} else {
+			// Création du tag
+			let liste = that.globalInput.firstElementChild;
+			let tag = document.createElement('span');
+				tag.innerHTML = value.innerHTML;
+				tag.className = 'tag';
+			let suppr = document.createElement('span');
+				suppr.innerHTML = '&times;';
+				suppr.addEventListener('click', function(e) {
+					supprTag(e.target.parentElement);
+				});
+			tag.appendChild(suppr);
+			liste.appendChild(tag);
+			that.el.value = '';
+			// On retire du tableau la valeur sélectionnée pour ne pas la selectionner deux fois
+			let pos = that.table.indexOf(value.innerHTML);
+			that.table.splice(pos, 1);
+			// console.log(that.table);
+		}
 		that.results.style.display = 'none';
 		value.className = 'possible';
 		selectedResult = -1;
 		that.el.focus();
+	}
+	
+	function supprTag(tag) {
+		let parent = tag.parentElement;
+		parent.removeChild(tag);
+		// On ré-intègre dans le tableau la valeur supprimée
+		that.table.push(tag.firstChild.data);
+		// console.log(that.table);
+	}
+	
+	/**
+	 * position
+	 *
+	 * @description Positionner la liste en fonction de la position de l'input
+	 * @param Aucun
+	 */
+	
+	function position() {		
+		if(that.multi === false) {
+			/* Les dimensions et positions de l'input pour que le bloc de résultats soit de la même taille */
+			let elWidth = that.el.offsetWidth;
+			let elHeight = that.el.offsetHeight;
+			let elLeft = that.el.offsetLeft;
+			let elTop = that.el.offsetTop;
+			
+			/* On donne une dimension et un placement lié à l'input */
+			that.results.style.width = elWidth + 'px';
+			that.results.style.position = 'absolute';
+			that.results.style.left = elLeft + 'px';
+			that.results.style.top = elHeight + elTop + 5 + 'px';
+			that.results.style.zIndex = 100;
+		} else {
+			/* Les dimensions et positions de l'englobant */
+			let globalWidth = that.globalInput.offsetWidth;
+			let globalHeight = that.globalInput.offsetHeight;
+			let globalLeft = that.globalInput.offsetLeft;
+			let globalTop = that.globalInput.offsetTop;
+			
+			/* On adapte la liste en fonction */
+			that.results.style.position = 'absolute';
+			that.results.style.width = globalWidth + 'px';
+			that.results.style.top = globalHeight + globalTop + 5 + 'px';
+		}
 	}
 	
 	/**
