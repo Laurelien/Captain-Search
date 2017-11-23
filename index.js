@@ -11,7 +11,7 @@
  * @param {array} table Tableau de valeurs où l'on effectue la recherche
  */
 
-let cptSearch = function(elem, multi, table) {
+let cptSearch = function(elem, table, multi) {
 	this.table = table; // Tableau d'items
 	this.el = document.querySelector(elem); // Input où chercher
 	/* Les dimensions et positions de l'input pour que le bloc de résultats soit de la même taille */
